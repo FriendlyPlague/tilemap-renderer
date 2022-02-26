@@ -11,14 +11,14 @@ using namespace std;
 class Renderer {
     public:
         //Key press surfaces constants
-        enum KeyPressSurfaces
+        enum Player_Surfaces
         {
-            KEY_PRESS_SURFACE_DEFAULT,
-            KEY_PRESS_SURFACE_UP,
-            KEY_PRESS_SURFACE_DOWN,
-            KEY_PRESS_SURFACE_LEFT,
-            KEY_PRESS_SURFACE_RIGHT,
-            KEY_PRESS_SURFACE_TOTAL
+            PLAYER_DEFAULT,
+            PLAYER_UP,
+            PLAYER_DOWN,
+            PLAYER_LEFT,
+            PLAYER_RIGHT,
+            PLAYER_TOTAL
         };
     private:
         int screen_width;
@@ -26,7 +26,7 @@ class Renderer {
         SDL_Window* gWindow = NULL;
         SDL_Surface* gScreenSurface = NULL;
         SDL_Surface* gCurrentSurface = NULL;
-        SDL_Surface* gKeyPressSurfaces[KEY_PRESS_SURFACE_TOTAL];
+        SDL_Surface* gPlayerSurfaces[PLAYER_TOTAL];
 
     public:
         Renderer(int width, int height);
@@ -35,7 +35,7 @@ class Renderer {
         bool init();
         bool loadMedia();
         SDL_Surface* loadSurface(string path);
-        bool applySurface();
+        bool applySurface(SDL_Rect* posRect);
         void setCurrentSurface(int s_num);
         void close();
 };

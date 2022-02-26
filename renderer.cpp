@@ -56,23 +56,26 @@ bool Renderer::loadMedia()
 {
     //Loading success flag
     bool success = true;
-    gKeyPressSurfaces[KEY_PRESS_SURFACE_DEFAULT] = loadSurface("Assets/press.bmp");
-    gKeyPressSurfaces[KEY_PRESS_SURFACE_DOWN] = loadSurface("Assets/down.bmp");
-    gKeyPressSurfaces[KEY_PRESS_SURFACE_UP] = loadSurface("Assets/up.bmp");
-    gKeyPressSurfaces[KEY_PRESS_SURFACE_LEFT] = loadSurface("Assets/left.bmp");
-    gKeyPressSurfaces[KEY_PRESS_SURFACE_RIGHT] = loadSurface("Assets/right.bmp");
-    for (int i = 0; i < KEY_PRESS_SURFACE_TOTAL; i++) {
-        if (gKeyPressSurfaces[i] == NULL) {
+    gPlayerSurfaces[PLAYER_DEFAULT] = loadSurface("Assets/default.png");
+    gPlayerSurfaces[PLAYER_DOWN] = loadSurface("Assets/down.png");
+    gPlayerSurfaces[PLAYER_UP] = loadSurface("Assets/up.png");
+    gPlayerSurfaces[PLAYER_LEFT] = loadSurface("Assets/left.png");
+    gPlayerSurfaces[PLAYER_RIGHT] = loadSurface("Assets/right.png");
+    for (int i = 0; i < PLAYER_TOTAL; i++) {
+        if (gPlayerSurfaces[i] == NULL) {
             success = false;
         }
     }
     return success;
 }
 
-bool Renderer::applySurface() 
+bool Renderer::applySurface(SDL_Rect* posRect) 
 {
     bool success = true;
-    SDL_BlitSurface(gCurrentSurface, NULL, gScreenSurface, NULL);
+    posRect->w = gCurrentSurface->w;
+    posRect->h = gCurrentSurface->h;
+    SDL_FillRect(gScreenSurface, NULL, 0x000000);
+    SDL_BlitSurface(gCurrentSurface, NULL, gScreenSurface, posRect);
     SDL_UpdateWindowSurface(gWindow);
     return success;
 }
@@ -80,9 +83,9 @@ bool Renderer::applySurface()
 void Renderer::close()
 {
     //Deallocate surfaces
-    for (int i = 0; i < KEY_PRESS_SURFACE_TOTAL; i++) {
-        SDL_FreeSurface(gKeyPressSurfaces[i]);
-        gKeyPressSurfaces[i] = NULL;
+    for (int i = 0; i < PLAYER_TOTAL; i++) {
+        SDL_FreeSurface(gPlayerSurfaces[i]);
+        gPlayerSurfaces[i] = NULL;
     }
     gCurrentSurface = NULL;
     SDL_DestroyWindow(gWindow);
@@ -94,7 +97,7 @@ void Renderer::close()
 
 void Renderer::setCurrentSurface(int s_num)
 {
-    gCurrentSurface = gKeyPressSurfaces[s_num];
+    gCurrentSurface = gPlayerSurfaces[s_num];
 }
 
 SDL_Surface* Renderer::loadSurface(string path)

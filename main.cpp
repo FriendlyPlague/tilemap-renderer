@@ -1,11 +1,17 @@
 //Using SDL and standard IO
 #include "renderer.h"
 #include <SDL2/SDL_events.h>
+#include <SDL2/SDL_rect.h>
 #include <stdio.h>
 
 //Screen dimension constants
 const int SCREEN_WIDTH = 1280;
 const int SCREEN_HEIGHT = 720;
+
+typedef struct {
+    int x = 0;
+    int y = 0;
+}player;
 
 int main( int argc, char* args[] )
 {
@@ -20,6 +26,8 @@ int main( int argc, char* args[] )
         return 1;
     }
     //Apply the image
+    player p;
+    SDL_Rect rect;
     bool quit = false;
     while(!quit)
     {
@@ -34,30 +42,36 @@ int main( int argc, char* args[] )
                 switch(e.key.keysym.sym)
                 {
                     case SDLK_UP:
-                    wind.setCurrentSurface(wind.KEY_PRESS_SURFACE_UP);
+                    wind.setCurrentSurface(wind.PLAYER_UP);
+                    p.y -= 10;
                     break;
 
                     case SDLK_DOWN:
-                    wind.setCurrentSurface(wind.KEY_PRESS_SURFACE_DOWN);
+                    wind.setCurrentSurface(wind.PLAYER_DOWN);
+                    p.y += 10;
                     break;
 
                     case SDLK_LEFT:
-                    wind.setCurrentSurface(wind.KEY_PRESS_SURFACE_LEFT);
+                    wind.setCurrentSurface(wind.PLAYER_LEFT);
+                    p.x -= 10;
                     break;
 
                     case SDLK_RIGHT:
-                    wind.setCurrentSurface(wind.KEY_PRESS_SURFACE_RIGHT);
+                    wind.setCurrentSurface(wind.PLAYER_RIGHT);
+                    p.x += 10;
                     break;
 
                     default:
-                    wind.setCurrentSurface(wind.KEY_PRESS_SURFACE_DEFAULT);
+                    wind.setCurrentSurface(wind.PLAYER_DEFAULT);
                     break;
                 }
             }
             else {
-                wind.setCurrentSurface(wind.KEY_PRESS_SURFACE_DEFAULT);
+                wind.setCurrentSurface(wind.PLAYER_DEFAULT);
             }
         }
-        wind.applySurface();
+        rect.x = p.x;
+        rect.y = p.y;
+        wind.applySurface(&rect);
     }
 }
