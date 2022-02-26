@@ -1,0 +1,3 @@
+/home/zacharyg/coding_stuff/sdlstuff/CMakeFiles/sdlgame.dir
+/home/zacharyg/coding_stuff/sdlstuff/CMakeFiles/edit_cache.dir
+/home/zacharyg/coding_stuff/sdlstuff/CMakeFiles/rebuild_cache.dir
