@@ -4,10 +4,15 @@
 #include <SDL2/SDL_keycode.h>
 #include <SDL2/SDL_rect.h>
 #include <stdio.h>
+#include <fstream>
 
 //Screen dimension constants
 const int SCREEN_WIDTH = 1280;
 const int SCREEN_HEIGHT = 720;
+
+// Map size constants
+const int MAP_W = 100;
+const int MAP_H = 100;
 
 typedef struct sqrHitbox{
     float x;
@@ -15,6 +20,13 @@ typedef struct sqrHitbox{
     float w;
     float h;
 } sqrHitbox;
+
+const int SPEED = 10;
+
+int layer1[MAP_W*MAP_H];
+int layer2[MAP_W*MAP_H];
+
+bool store_csv(int* arr,string mapPath, int cw, int ch);
 
 int main( int argc, char* args[] )
 {
@@ -28,9 +40,18 @@ int main( int argc, char* args[] )
         printf( "Failed to load media!\n" );
         return 1;
     }
+    if (!store_csv(layer1,"Assets/background_Tile Layer 1.csv", MAP_W, MAP_H)) {
+        printf("layer 1 failed to load!\n");
+        return 1;
+    }
+    if (!store_csv(layer2,"Assets/background_Tile Layer 2.csv", MAP_W, MAP_H)) {
+        printf("layer 2 failed to load!\n");
+        return 1;
+    }
     bool quit = false;
     SDL_Event e;
     while (!quit) {
+        Uint64 start = SDL_GetPerformanceCounter(); //start timer
         //Handle events on queue
         while( SDL_PollEvent( &e ) != 0 )
         {
@@ -40,23 +61,53 @@ int main( int argc, char* args[] )
                 quit = true;
                 return 0;
             }
-            if (e.type == SDL_KEYDOWN) {
-                switch (e.key.keysym.sym) {
-                    case SDLK_UP:
-                    wind.cam.y -= 10;
-                    break;
-                    case SDLK_DOWN:
-                    wind.cam.y += 10;
-                    break;
-                    case SDLK_RIGHT:
-                    wind.cam.x += 10;
-                    break;
-                    case SDLK_LEFT:
-                    wind.cam.x -= 10;
-                    break;
+        }
+        const Uint8* currentKeyStates = SDL_GetKeyboardState(NULL); //get state of keyboard
+        if (currentKeyStates[SDL_SCANCODE_DOWN]) {
+            wind.cam.y += SPEED;
+        }
+        if (currentKeyStates[SDL_SCANCODE_UP]) {
+            wind.cam.y -= SPEED;
+        }
+        if (currentKeyStates[SDL_SCANCODE_RIGHT]) {
+            wind.cam.x += SPEED;
+        }
+        if (currentKeyStates[SDL_SCANCODE_LEFT]) {
+            wind.cam.x -= SPEED;
+        }
+
+        wind.renderAll(layer1, layer2); // Renders all layers
+
+        Uint64 end = SDL_GetPerformanceCounter();
+        float elapsedMS = (end - start) / (float)SDL_GetPerformanceFrequency()*1000.0f;
+        SDL_Delay(floor(16.666f - elapsedMS));
+        end = SDL_GetPerformanceCounter();
+        elapsedMS = (end - start) / (float)SDL_GetPerformanceFrequency();
+        printf("Current FPS: %f\n",1.0f/elapsedMS);
+    }
+}
+
+bool store_csv(int* arr,string mapPath, int cw, int ch) {
+    ifstream csvFile(mapPath);
+    for (int lh = 0; lh < ch; lh++) {
+        for (int lw = 0; lw < cw; lw++) {
+            string tmp;
+            if (lw == cw-1) {
+                if(!getline(csvFile,tmp)) {
+                    printf("Invalid map dimensions!\n");
+                    csvFile.close();
+                    return false;
                 }
             }
+            else if (!getline(csvFile,tmp, ',')) {
+                printf("Invalid map dimensions!\n");
+                csvFile.close();
+                return false;
+            }
+            int loc = stoi(tmp);
+            arr[cw*lh+lw] = loc;
         }
-        wind.renderAll();
     }
+    csvFile.close();
+    return true;
 }

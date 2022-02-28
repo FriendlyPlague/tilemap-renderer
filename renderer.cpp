@@ -1,9 +1,7 @@
 #include "renderer.h"
 #include <SDL2/SDL_rect.h>
-#include <SDL2/SDL_render.h>
-#include <fstream>
-#include <ios>
 
+//TODO: change have csv's loaded into memory instead of opening multiple times each frame.
 
 Renderer::Renderer(int width, int height, float gscale, int tileW) 
 {
@@ -58,36 +56,16 @@ bool Renderer::loadMedia()
     return true;
 }
 
-bool Renderer::renderMap(SDL_Texture* srcMap,string mapPath, int cw, int ch)
+bool Renderer::renderMap(SDL_Texture* srcMap, int* mapArr, int cw, int ch)
 {
     /*renders every thing in csv file with corresponding texture left to right,
     top to bottom*/
-    ifstream csvFile(mapPath);
-    if (!csvFile.is_open()) {
-        printf("Could not open: %s\n",mapPath.c_str());
-        return false;
-    }
     int tw;
-    SDL_QueryTexture(srcMap,NULL, NULL, &tw, NULL);
+    SDL_QueryTexture(srcMap, NULL, NULL, &tw, NULL);
     tw /= tileSize;
     bool success = true;
     for (int lh = 0; lh < ch; lh++) {
         for (int lw = 0; lw < cw; lw++) {
-            string tmp;
-            if (lw == cw-1) {
-                if(!getline(csvFile,tmp)) {
-                    printf("Invalid map dimensions!\n");
-                    return false;
-                }
-            }
-            else if (!getline(csvFile,tmp, ',')) {
-                printf("Invalid map dimensions!\n");
-                return false;
-            }
-            int loc = stoi(tmp);
-            if (loc == -1) {
-                continue;
-            }
             SDL_Rect dRect;
             dRect.x = (lw * tileSize * scale) - cam.x;
             dRect.y = (lh * tileSize * scale) - cam.y;
@@ -98,6 +76,7 @@ bool Renderer::renderMap(SDL_Texture* srcMap,string mapPath, int cw, int ch)
             else if (dRect.y > cam.h) {
                 return true;
             }
+            int loc = mapArr[cw*lh+lw];
             SDL_Rect sRect;
             sRect.x = loc % tw * tileSize;
             sRect.y = loc / tw * tileSize;
@@ -108,7 +87,6 @@ bool Renderer::renderMap(SDL_Texture* srcMap,string mapPath, int cw, int ch)
             }
         }
     }
-    csvFile.close();
     return success;
 }
 
@@ -160,11 +138,11 @@ SDL_Texture* Renderer::loadTexture(string path)
     return newTexture;
 }
 
-bool Renderer::renderAll()
+bool Renderer::renderAll(int* layer1, int* layer2)
 {
     SDL_RenderClear(gRenderer);
-    renderMap(tMap, "Assets/background_Tile Layer 1.csv", 100, 100);
-    renderMap(tMap, "Assets/background_Tile Layer 2.csv", 100, 100);
+    renderMap(tMap, layer1, 100, 100);
+    renderMap(tMap, layer2, 100, 100);
     SDL_RenderPresent(gRenderer);
     return true;
 }

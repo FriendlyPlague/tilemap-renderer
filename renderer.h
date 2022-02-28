@@ -37,9 +37,9 @@ class Renderer {
         bool init();
         bool loadMedia();
         bool applySurface(SDL_Rect* posRect);
-        bool renderMap(SDL_Texture* srcMap,string mapPath, int cw, int ch);
+        bool renderMap(SDL_Texture* srcMap, int* mapArr, int cw, int ch);
         SDL_Texture* loadTexture(string path);
-        bool renderAll();
+        bool renderAll(int* layer1, int* layer2);
         void setCurrentTexture(int s_num);
         void close();
 };
