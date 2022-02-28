@@ -21,7 +21,7 @@ typedef struct sqrHitbox{
     float h;
 } sqrHitbox;
 
-const float SPEED = 2;
+const float SPEED = 1;
 
 int layer1[MAP_H*MAP_W];
 int layer2[MAP_H*MAP_W];
@@ -50,10 +50,15 @@ int main( int argc, char* args[] )
     }
     bool quit = false;
     SDL_Event e;
+    Uint64 NOW = SDL_GetPerformanceCounter();
+    Uint64 LAST = 0;
+    double deltaTime = 0;
     while (!quit) {
-        Uint64 start = SDL_GetPerformanceCounter(); //start timer
+        LAST = NOW;
+        NOW = SDL_GetPerformanceCounter();
+        deltaTime = (double)((NOW - LAST)*1000 / (double)SDL_GetPerformanceFrequency());
         //Handle events on queue
-        while( SDL_PollEvent( &e ) != 0 )
+        while( SDL_PollEvent(&e) != 0 )
         {
             //User requests quit
             if( e.type == SDL_QUIT )
@@ -62,29 +67,22 @@ int main( int argc, char* args[] )
                 return 0;
             }
         }
+
         const Uint8* currentKeyStates = SDL_GetKeyboardState(NULL); //get state of keyboard
         if (currentKeyStates[SDL_SCANCODE_DOWN]) {
-            wind.cam.y += SPEED;
+            wind.cam.y += SPEED * deltaTime;
         }
         if (currentKeyStates[SDL_SCANCODE_UP]) {
-            wind.cam.y -= SPEED;
+            wind.cam.y -= SPEED * deltaTime;
         }
         if (currentKeyStates[SDL_SCANCODE_RIGHT]) {
-            wind.cam.x += SPEED;
+            wind.cam.x += SPEED * deltaTime;
         }
         if (currentKeyStates[SDL_SCANCODE_LEFT]) {
-            wind.cam.x -= SPEED;
+            wind.cam.x -= SPEED * deltaTime;
         }
 
         wind.renderAll(layer1, layer2); // Renders all layers
-
-        Uint64 end = SDL_GetPerformanceCounter();
-        float elapsed = (end - start) / (float)SDL_GetPerformanceFrequency();
-        printf("current framerate: %f\n", 1.0f/ elapsed);
-        // SDL_Delay(floor(16.666f - elapsedMS));
-        // end = SDL_GetPerformanceCounter();
-        // elapsedMS = (end - start) / (float)SDL_GetPerformanceFrequency();
-        // printf("Current FPS: %f\n",1.0f/elapsedMS);
     }
 }
 

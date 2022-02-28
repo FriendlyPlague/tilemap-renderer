@@ -68,11 +68,14 @@ bool Renderer::renderMap(SDL_Texture* srcMap, int* mapArr, int cw, int ch)
     int maxY = SDL_clamp((cam.y+cam.h)/(tileSize*scale)+1,0 , cw);
     for (int lh = camUY; lh < maxY; lh++) {
         for (int lw = camUX; lw < maxX; lw++) {
+            int loc = mapArr[cw*lh+lw];
+            if (loc == -1) {
+                continue;
+            }
             SDL_Rect dRect;
             dRect.x = (lw * tileSize * scale) - cam.x;
             dRect.y = (lh * tileSize * scale) - cam.y;
             dRect.w = tileSize*scale, dRect.h = tileSize*scale;
-            int loc = mapArr[cw*lh+lw];
             SDL_Rect sRect;
             sRect.x = loc % tw * tileSize;
             sRect.y = loc / tw * tileSize;
