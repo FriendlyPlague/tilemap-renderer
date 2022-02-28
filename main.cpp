@@ -23,8 +23,8 @@ typedef struct sqrHitbox{
 
 const float SPEED = 2;
 
-int* layer1 = (int*)malloc(sizeof(int)*MAP_H*MAP_W);
-int* layer2 = (int*)malloc(sizeof(int)*MAP_H*MAP_W);
+int layer1[MAP_H*MAP_W];
+int layer2[MAP_H*MAP_W];
 
 bool store_csv(int* arr,string mapPath, int cw, int ch);
 
@@ -59,8 +59,6 @@ int main( int argc, char* args[] )
             if( e.type == SDL_QUIT )
             {
                 quit = true;
-                free(layer1);
-                free(layer2);
                 return 0;
             }
         }
@@ -88,8 +86,6 @@ int main( int argc, char* args[] )
         // elapsedMS = (end - start) / (float)SDL_GetPerformanceFrequency();
         // printf("Current FPS: %f\n",1.0f/elapsedMS);
     }
-    free(layer1);
-    free(layer2);
 }
 
 bool store_csv(int* arr,string mapPath, int cw, int ch) {
