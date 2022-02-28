@@ -1,8 +1,6 @@
 #include "renderer.h"
 #include <SDL2/SDL_rect.h>
 
-//TODO: change have csv's loaded into memory instead of opening multiple times each frame.
-
 Renderer::Renderer(int width, int height, float gscale, int tileW) 
 {
     screen_width = width;
@@ -64,18 +62,16 @@ bool Renderer::renderMap(SDL_Texture* srcMap, int* mapArr, int cw, int ch)
     SDL_QueryTexture(srcMap, NULL, NULL, &tw, NULL);
     tw /= tileSize;
     bool success = true;
-    for (int lh = 0; lh < ch; lh++) {
-        for (int lw = 0; lw < cw; lw++) {
+    int camUX = SDL_clamp(cam.x /(tileSize*scale), 0, cw);
+    int camUY = SDL_clamp(cam.y /(tileSize*scale), 0, ch);
+    int maxX = SDL_clamp((cam.x+cam.w)/(tileSize*scale)+1,0 , cw);
+    int maxY = SDL_clamp((cam.y+cam.h)/(tileSize*scale)+1,0 , cw);
+    for (int lh = camUY; lh < maxY; lh++) {
+        for (int lw = camUX; lw < maxX; lw++) {
             SDL_Rect dRect;
             dRect.x = (lw * tileSize * scale) - cam.x;
             dRect.y = (lh * tileSize * scale) - cam.y;
             dRect.w = tileSize*scale, dRect.h = tileSize*scale;
-            if (dRect.x < -(tileSize * scale) || dRect.y < -(tileSize * scale) || dRect.x > cam.w) {
-                continue;
-            }
-            else if (dRect.y > cam.h) {
-                return true;
-            }
             int loc = mapArr[cw*lh+lw];
             SDL_Rect sRect;
             sRect.x = loc % tw * tileSize;
@@ -142,7 +138,10 @@ bool Renderer::renderAll(int* layer1, int* layer2)
 {
     SDL_RenderClear(gRenderer);
     renderMap(tMap, layer1, 100, 100);
+    // printf("rendered layer 1\n");
     renderMap(tMap, layer2, 100, 100);
+    // printf("rendered layer 2\n");
     SDL_RenderPresent(gRenderer);
+    // printf("updated screen\n");
     return true;
 }

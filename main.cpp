@@ -21,10 +21,10 @@ typedef struct sqrHitbox{
     float h;
 } sqrHitbox;
 
-const int SPEED = 10;
+const float SPEED = 2;
 
-int layer1[MAP_W*MAP_H];
-int layer2[MAP_W*MAP_H];
+int* layer1 = (int*)malloc(sizeof(int)*MAP_H*MAP_W);
+int* layer2 = (int*)malloc(sizeof(int)*MAP_H*MAP_W);
 
 bool store_csv(int* arr,string mapPath, int cw, int ch);
 
@@ -59,6 +59,8 @@ int main( int argc, char* args[] )
             if( e.type == SDL_QUIT )
             {
                 quit = true;
+                free(layer1);
+                free(layer2);
                 return 0;
             }
         }
@@ -79,12 +81,15 @@ int main( int argc, char* args[] )
         wind.renderAll(layer1, layer2); // Renders all layers
 
         Uint64 end = SDL_GetPerformanceCounter();
-        float elapsedMS = (end - start) / (float)SDL_GetPerformanceFrequency()*1000.0f;
-        SDL_Delay(floor(16.666f - elapsedMS));
-        end = SDL_GetPerformanceCounter();
-        elapsedMS = (end - start) / (float)SDL_GetPerformanceFrequency();
-        printf("Current FPS: %f\n",1.0f/elapsedMS);
+        float elapsed = (end - start) / (float)SDL_GetPerformanceFrequency();
+        printf("current framerate: %f\n", 1.0f/ elapsed);
+        // SDL_Delay(floor(16.666f - elapsedMS));
+        // end = SDL_GetPerformanceCounter();
+        // elapsedMS = (end - start) / (float)SDL_GetPerformanceFrequency();
+        // printf("Current FPS: %f\n",1.0f/elapsedMS);
     }
+    free(layer1);
+    free(layer2);
 }
 
 bool store_csv(int* arr,string mapPath, int cw, int ch) {

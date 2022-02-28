@@ -12,8 +12,8 @@ using namespace std;
 class Renderer {
     private:
         typedef struct camera {
-            int x = 100;
-            int y = 100;
+            int x = 0;
+            int y = 0;
             int w;
             int h;
         } camera;
