@@ -11,6 +11,8 @@ Renderer::Renderer(int width, int height, float gscale, int tileW)
     screen_height = height;
     scale = gscale;
     tileSize = tileW;
+    cam.w = width;
+    cam.h = height;
 }
 
 Renderer::~Renderer() 
@@ -87,9 +89,15 @@ bool Renderer::renderMap(SDL_Texture* srcMap,string mapPath, int cw, int ch)
                 continue;
             }
             SDL_Rect dRect;
-            dRect.x = lw * tileSize * scale;
-            dRect.y = lh * tileSize * scale;
+            dRect.x = (lw * tileSize * scale) - cam.x;
+            dRect.y = (lh * tileSize * scale) - cam.y;
             dRect.w = tileSize*scale, dRect.h = tileSize*scale;
+            if (dRect.x < -(tileSize * scale) || dRect.y < -(tileSize * scale) || dRect.x > cam.w) {
+                continue;
+            }
+            else if (dRect.y > cam.h) {
+                return true;
+            }
             SDL_Rect sRect;
             sRect.x = loc % tw * tileSize;
             sRect.y = loc / tw * tileSize;
@@ -100,6 +108,7 @@ bool Renderer::renderMap(SDL_Texture* srcMap,string mapPath, int cw, int ch)
             }
         }
     }
+    csvFile.close();
     return success;
 }
 
@@ -154,7 +163,8 @@ SDL_Texture* Renderer::loadTexture(string path)
 bool Renderer::renderAll()
 {
     SDL_RenderClear(gRenderer);
-    renderMap(tMap, "Assets/background.csv", 100, 100);
+    renderMap(tMap, "Assets/background_Tile Layer 1.csv", 100, 100);
+    renderMap(tMap, "Assets/background_Tile Layer 2.csv", 100, 100);
     SDL_RenderPresent(gRenderer);
     return true;
 }

@@ -11,16 +11,24 @@ using namespace std;
 
 class Renderer {
     private:
+        typedef struct camera {
+            int x = 100;
+            int y = 100;
+            int w;
+            int h;
+        } camera;
+    public: camera cam;
+    private:
         int screen_width;
         int screen_height;
         int tileSize;
         int scale;
-        SDL_Texture* tMap = NULL;
         SDL_Window* gWindow = NULL;
         SDL_Surface* gScreenSurface = NULL;
         SDL_Texture* gCurrentSurface = NULL;
         SDL_Renderer* gRenderer = NULL;
         SDL_Texture* gTexture = NULL;
+        SDL_Texture* tMap;
 
     public:
         Renderer(int width, int height, float scale, int tilew);
