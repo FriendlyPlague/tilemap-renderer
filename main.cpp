@@ -86,7 +86,7 @@ int main( int argc, char* args[] )
         int dirs = currentKeyStates[SDL_SCANCODE_DOWN] + currentKeyStates[SDL_SCANCODE_UP] + currentKeyStates[SDL_SCANCODE_RIGHT] + currentKeyStates[SDL_SCANCODE_LEFT];
         float cspeed = SPEED;
         if (dirs > 1) {
-            cspeed /= 1.6;
+            cspeed /= 1.5;
         }
         if (currentKeyStates[SDL_SCANCODE_DOWN]) {
             wind.cam.y += cspeed * deltaTime;
