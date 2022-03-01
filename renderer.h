@@ -5,6 +5,8 @@
 #include <SDL2/SDL_render.h>
 #include <SDL2/SDL_surface.h>
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_rect.h>
+
 #include <string>
 
 using namespace std;
@@ -12,8 +14,8 @@ using namespace std;
 class Renderer {
     private:
         typedef struct camera {
-            int x = 0;
-            int y = 0;
+            float x = 0;
+            float y = 0;
             int w;
             int h;
         } camera;
@@ -23,6 +25,7 @@ class Renderer {
         int screen_height;
         int tileSize;
         int scale;
+        SDL_Texture* playerT = NULL;
         SDL_Window* gWindow = NULL;
         SDL_Surface* gScreenSurface = NULL;
         SDL_Texture* gCurrentSurface = NULL;
@@ -39,7 +42,7 @@ class Renderer {
         bool applySurface(SDL_Rect* posRect);
         bool renderMap(SDL_Texture* srcMap, int* mapArr, int cw, int ch);
         SDL_Texture* loadTexture(string path);
-        bool renderAll(int* layer1, int* layer2);
+        bool renderAll(int* layer1, int* layer2, SDL_Rect* pSrc, SDL_Rect* pd);
         void setCurrentTexture(int s_num);
         void close();
 };

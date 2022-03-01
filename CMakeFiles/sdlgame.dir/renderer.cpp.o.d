@@ -204,7 +204,8 @@ CMakeFiles/sdlgame.dir/renderer.cpp.o: \
  /usr/local/include/SDL2/SDL_surface.h /usr/include/SDL2/SDL_image.h \
  /usr/include/SDL2/SDL.h /usr/include/SDL2/SDL_version.h \
  /usr/include/SDL2/begin_code.h /usr/include/SDL2/close_code.h \
- /usr/include/c++/11.2.0/string /usr/include/c++/11.2.0/bits/stringfwd.h \
+ /usr/local/include/SDL2/SDL_rect.h /usr/include/c++/11.2.0/string \
+ /usr/include/c++/11.2.0/bits/stringfwd.h \
  /usr/include/c++/11.2.0/bits/memoryfwd.h \
  /usr/include/c++/11.2.0/bits/char_traits.h \
  /usr/include/c++/11.2.0/bits/postypes.h /usr/include/c++/11.2.0/cwchar \
@@ -250,5 +251,4 @@ CMakeFiles/sdlgame.dir/renderer.cpp.o: \
  /usr/include/asm-generic/errno.h /usr/include/asm-generic/errno-base.h \
  /usr/include/bits/types/error_t.h \
  /usr/include/c++/11.2.0/bits/charconv.h \
- /usr/include/c++/11.2.0/bits/basic_string.tcc \
- /usr/local/include/SDL2/SDL_rect.h
+ /usr/include/c++/11.2.0/bits/basic_string.tcc

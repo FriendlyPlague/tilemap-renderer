@@ -13,24 +13,27 @@ const int SCREEN_HEIGHT = 720;
 // Map size constants
 const int MAP_W = 100;
 const int MAP_H = 100;
+const float SCALE = 3;
 
-typedef struct sqrHitbox{
-    float x;
-    float y;
-    float w;
-    float h;
-} sqrHitbox;
+// typedef struct sqrHitbox {
+//     float x;
+//     float y;
+//     float w;
+//     float h;
+// } sqrHitbox;
 
-const float SPEED = 1;
+const float SPEED = .3;
 
 int layer1[MAP_H*MAP_W];
 int layer2[MAP_H*MAP_W];
 
-bool store_csv(int* arr,string mapPath, int cw, int ch);
+bool storeCsv(int* arr,string mapPath, int cw, int ch);
+int animate(double* dt);
+
 
 int main( int argc, char* args[] )
 {
-    Renderer wind(SCREEN_WIDTH, SCREEN_HEIGHT, 2.5,16);
+    Renderer wind(SCREEN_WIDTH, SCREEN_HEIGHT, SCALE,16);
     if(!wind.init() )
     {
         printf( "Failed to initialize!\n" );
@@ -40,14 +43,24 @@ int main( int argc, char* args[] )
         printf( "Failed to load media!\n" );
         return 1;
     }
-    if (!store_csv(layer1,"Assets/background_Tile Layer 1.csv", MAP_W, MAP_H)) {
+    if (!storeCsv(layer1,"Assets/background_Tile Layer 1.csv", MAP_W, MAP_H)) {
         printf("layer 1 failed to load!\n");
         return 1;
     }
-    if (!store_csv(layer2,"Assets/background_Tile Layer 2.csv", MAP_W, MAP_H)) {
+    if (!storeCsv(layer2,"Assets/background_Tile Layer 2.csv", MAP_W, MAP_H)) {
         printf("layer 2 failed to load!\n");
         return 1;
     }
+
+    SDL_Rect pd; //player dst rectangle
+    pd.x = (wind.cam.w)/2;
+    pd.y = (wind.cam.h)/2;
+    pd.h = 32*SCALE;
+    pd.w = 16*SCALE;
+    SDL_Rect pSrc; //player src rectangle
+    pSrc.h = 32;
+    pSrc.w = 16;
+
     bool quit = false;
     SDL_Event e;
     Uint64 NOW = SDL_GetPerformanceCounter();
@@ -69,24 +82,39 @@ int main( int argc, char* args[] )
         }
 
         const Uint8* currentKeyStates = SDL_GetKeyboardState(NULL); //get state of keyboard
+        int a_frame = animate(&deltaTime);
+        int dirs = currentKeyStates[SDL_SCANCODE_DOWN] + currentKeyStates[SDL_SCANCODE_UP] + currentKeyStates[SDL_SCANCODE_RIGHT] + currentKeyStates[SDL_SCANCODE_LEFT];
+        float cspeed = SPEED;
+        if (dirs > 1) {
+            cspeed /= 1.6;
+        }
         if (currentKeyStates[SDL_SCANCODE_DOWN]) {
-            wind.cam.y += SPEED * deltaTime;
+            wind.cam.y += cspeed * deltaTime;
+            pSrc.x = a_frame * 16;
+            pSrc.y = 0;
         }
         if (currentKeyStates[SDL_SCANCODE_UP]) {
-            wind.cam.y -= SPEED * deltaTime;
+            wind.cam.y -= cspeed * deltaTime;
+            pSrc.x = a_frame * 16;
+            pSrc.y = 64;
         }
         if (currentKeyStates[SDL_SCANCODE_RIGHT]) {
-            wind.cam.x += SPEED * deltaTime;
+            wind.cam.x += cspeed * deltaTime;
+            pSrc.x = a_frame * 16;
+            pSrc.y = 32;
         }
         if (currentKeyStates[SDL_SCANCODE_LEFT]) {
-            wind.cam.x -= SPEED * deltaTime;
+            wind.cam.x -= cspeed * deltaTime;
+            pSrc.x = a_frame * 16;
+            pSrc.y = 96;
         }
-
-        wind.renderAll(layer1, layer2); // Renders all layers
+        pd.x = (wind.cam.w)/2;
+        pd.y = (wind.cam.h)/2;
+        wind.renderAll(layer1, layer2, &pSrc, &pd); // Renders all layers
     }
 }
 
-bool store_csv(int* arr,string mapPath, int cw, int ch) {
+bool storeCsv(int* arr,string mapPath, int cw, int ch) {
     ifstream csvFile(mapPath);
     for (int lh = 0; lh < ch; lh++) {
         for (int lw = 0; lw < cw; lw++) {
@@ -109,4 +137,13 @@ bool store_csv(int* arr,string mapPath, int cw, int ch) {
     }
     csvFile.close();
     return true;
+}
+
+int animate(double* dt) {
+    static double a = 0;
+    a += (1/90.0f) * (*dt);
+    if (!(a < 4.0f)) {
+        a = 0.0f;
+    }
+    return (int)a;
 }

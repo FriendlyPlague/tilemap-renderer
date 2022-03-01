@@ -203,7 +203,8 @@ CMakeFiles/sdlgame.dir/main.cpp.o: \
  /usr/local/include/SDL2/SDL_surface.h /usr/include/SDL2/SDL_image.h \
  /usr/include/SDL2/SDL.h /usr/include/SDL2/SDL_version.h \
  /usr/include/SDL2/begin_code.h /usr/include/SDL2/close_code.h \
- /usr/include/c++/11.2.0/string /usr/include/c++/11.2.0/bits/stringfwd.h \
+ /usr/local/include/SDL2/SDL_rect.h /usr/include/c++/11.2.0/string \
+ /usr/include/c++/11.2.0/bits/stringfwd.h \
  /usr/include/c++/11.2.0/bits/memoryfwd.h \
  /usr/include/c++/11.2.0/bits/char_traits.h \
  /usr/include/c++/11.2.0/bits/postypes.h /usr/include/c++/11.2.0/cwchar \
@@ -251,9 +252,9 @@ CMakeFiles/sdlgame.dir/main.cpp.o: \
  /usr/include/c++/11.2.0/bits/charconv.h \
  /usr/include/c++/11.2.0/bits/basic_string.tcc \
  /usr/local/include/SDL2/SDL_events.h \
- /usr/local/include/SDL2/SDL_keycode.h /usr/local/include/SDL2/SDL_rect.h \
- /usr/include/c++/11.2.0/fstream /usr/include/c++/11.2.0/istream \
- /usr/include/c++/11.2.0/ios /usr/include/c++/11.2.0/exception \
+ /usr/local/include/SDL2/SDL_keycode.h /usr/include/c++/11.2.0/fstream \
+ /usr/include/c++/11.2.0/istream /usr/include/c++/11.2.0/ios \
+ /usr/include/c++/11.2.0/exception \
  /usr/include/c++/11.2.0/bits/exception_ptr.h \
  /usr/include/c++/11.2.0/bits/cxxabi_init_exception.h \
  /usr/include/c++/11.2.0/typeinfo \

@@ -1,5 +1,4 @@
 #include "renderer.h"
-#include <SDL2/SDL_rect.h>
 
 Renderer::Renderer(int width, int height, float gscale, int tileW) 
 {
@@ -51,6 +50,7 @@ bool Renderer::loadMedia()
 {
     //Loading success flag
     tMap = loadTexture("Assets/Overworld.png");
+    playerT = loadTexture("Assets/character.png");
     return true;
 }
 
@@ -97,12 +97,10 @@ bool Renderer::applySurface(SDL_Rect* posRect)
 void Renderer::close()
 {
     //Deallocate surfaces
-
-    gCurrentSurface = NULL;
     SDL_DestroyTexture(tMap);
+    SDL_DestroyTexture(playerT);
     SDL_DestroyRenderer(gRenderer);
     SDL_DestroyWindow(gWindow);
-    gWindow = NULL;
 
     //Quit SDL subsystems
     IMG_Quit();
@@ -137,13 +135,14 @@ SDL_Texture* Renderer::loadTexture(string path)
     return newTexture;
 }
 
-bool Renderer::renderAll(int* layer1, int* layer2)
+bool Renderer::renderAll(int* layer1, int* layer2, SDL_Rect* pSrc, SDL_Rect* pd)
 {
     SDL_RenderClear(gRenderer);
     renderMap(tMap, layer1, 100, 100);
     // printf("rendered layer 1\n");
     renderMap(tMap, layer2, 100, 100);
     // printf("rendered layer 2\n");
+    SDL_RenderCopy(gRenderer, playerT, pSrc, pd); // render player
     SDL_RenderPresent(gRenderer);
     // printf("updated screen\n");
     return true;

@@ -260,6 +260,7 @@ CMakeFiles/sdlgame.dir/main.cpp.o: main.cpp \
   /usr/include/SDL2/SDL_version.h \
   /usr/include/SDL2/begin_code.h \
   /usr/include/SDL2/close_code.h \
+  /usr/local/include/SDL2/SDL_rect.h \
   /usr/include/c++/11.2.0/string \
   /usr/include/c++/11.2.0/bits/stringfwd.h \
   /usr/include/c++/11.2.0/bits/memoryfwd.h \
@@ -325,7 +326,6 @@ CMakeFiles/sdlgame.dir/main.cpp.o: main.cpp \
   /usr/include/c++/11.2.0/bits/basic_string.tcc \
   /usr/local/include/SDL2/SDL_events.h \
   /usr/local/include/SDL2/SDL_keycode.h \
-  /usr/local/include/SDL2/SDL_rect.h \
   /usr/include/c++/11.2.0/fstream \
   /usr/include/c++/11.2.0/istream \
   /usr/include/c++/11.2.0/ios \
@@ -619,6 +619,7 @@ CMakeFiles/sdlgame.dir/renderer.cpp.o: renderer.cpp \
   /usr/include/SDL2/SDL_version.h \
   /usr/include/SDL2/begin_code.h \
   /usr/include/SDL2/close_code.h \
+  /usr/local/include/SDL2/SDL_rect.h \
   /usr/include/c++/11.2.0/string \
   /usr/include/c++/11.2.0/bits/stringfwd.h \
   /usr/include/c++/11.2.0/bits/memoryfwd.h \
@@ -681,8 +682,7 @@ CMakeFiles/sdlgame.dir/renderer.cpp.o: renderer.cpp \
   /usr/include/asm-generic/errno-base.h \
   /usr/include/bits/types/error_t.h \
   /usr/include/c++/11.2.0/bits/charconv.h \
-  /usr/include/c++/11.2.0/bits/basic_string.tcc \
-  /usr/local/include/SDL2/SDL_rect.h
+  /usr/include/c++/11.2.0/bits/basic_string.tcc
 
 
 /usr/include/c++/11.2.0/bits/fstream.tcc:
