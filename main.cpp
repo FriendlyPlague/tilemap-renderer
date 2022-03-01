@@ -85,6 +85,7 @@ int main( int argc, char* args[] )
         int a_frame = animate(&deltaTime);
         int dirs = currentKeyStates[SDL_SCANCODE_DOWN] + currentKeyStates[SDL_SCANCODE_UP] + currentKeyStates[SDL_SCANCODE_RIGHT] + currentKeyStates[SDL_SCANCODE_LEFT];
         float cspeed = SPEED;
+        pSrc.x = 0;
         if (dirs > 1) {
             cspeed /= 1.5;
         }
